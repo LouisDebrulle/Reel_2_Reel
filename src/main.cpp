@@ -19,9 +19,9 @@ unsigned long lDt = 100;
 Encoder _encoder(A_pin, B_pin);
 // pwm_tim_1 _pwm(pwm_pin);
 
-int times[] = {0, 200}; // Time points in seconds
-int speeds[] = {500, 190}; // Speed points (e.g., rpm)
-lin_speed_curve _speed_curve(times, speeds, 2); // Create the speed curve
+double times[] = {10*1e3, 20*1e3, 30*1e3}; // Time points in seconds
+double speeds[] = {0, 10, 10}; // Speed points (e.g., rpm)
+lin_speed_curve _speed_curve(times, speeds, 3); // Create the speed curve
 
 
 
@@ -52,7 +52,7 @@ void setup() {
   
 
 void loop() {
-  double time = millis() / 1000;
+  double time = millis();
   double speed;
   if (pulse_interval != 0) {
     speed = (60.0 * 1e6) / (double(pulses_per_rev) * pulse_interval);
@@ -63,9 +63,9 @@ void loop() {
 
   double currentSpeed = _speed_curve.getSpeedAtTime(time);
 
-  Serial.print(currentSpeed);
+  Serial.print(time);
   Serial.print(" ,");
-  Serial.println(speed);
+  Serial.println(currentSpeed);
 
   OCR3A = currentSpeed;
 
