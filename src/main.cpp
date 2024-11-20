@@ -5,12 +5,23 @@
 #include "linear_speed_curve.h"
 #include "state_machine.h"
 
-int A_pin = 2;
-int B_pin = 3;
-int pwm_pin = 5;
-int status_pin = 18;
+const int A_pin = 2;
+const int B_pin = 3;
+const int pwm_pin = 5;
+const int status_pin = 18;
+const const int pulses_per_rev = 2048;
 
-const int pulses_per_rev = 2048;
+struct Board {
+    Encoder _encoder = Encoder(2, 3);
+
+}_board;
+
+
+ 
+
+
+
+
 unsigned long last_pulse_time = 0;
 unsigned long pulse_interval = 0;
 int direction = 1;
