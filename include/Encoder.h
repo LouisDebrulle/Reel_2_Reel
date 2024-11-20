@@ -1,5 +1,10 @@
+#ifndef ENCODER_H
+#define ENCODER_H
+
 #include <Arduino.h>
-#include <arduino-timer.h>
+
+
+
 
 class Encoder
 {
@@ -9,10 +14,11 @@ public:
     const int B_pin;
 
     const int pulses_per_rev = 2048; 
-    unsigned long last_pulse_time = 0;
-    unsigned long pulse_interval = 0;
+    unsigned long last_pulse_time ;
+    unsigned long pulse_interval;
     int direction = 1;
     double speed();
+    void innit();
     
     Encoder(int A_pin, int B_pin);
     
@@ -46,6 +52,12 @@ double Encoder::get_speed(){
     return speed *= direction;
 }
 
+void Encoder::innit(){
+    last_pulse_time = 0;
+    pulse_interval = 0;
+    direction = 1;
+}
 
 
+#endif
 
