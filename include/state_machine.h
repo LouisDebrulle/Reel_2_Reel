@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "board.h"
+#include "motor.h"
 
 class state_machine
 {
@@ -13,28 +14,26 @@ public:
         off
     };
     status state;
-    Board& _board;
-    state_machine(Board& board);
-    void step();
-    void change_state();
+
+
+    state_machine();
+    bool step();
+    void change_state(Board& _board);
 };
 
 
-state_machine::state_machine(Board& board) 
-    :_board(board)
+state_machine::state_machine() 
 {
   state = off;
 }
 
-void state_machine::step(){
+bool state_machine::step(){
     if (state == on) {
-        
-    } else if (state == off) {
-        
-    }
+        return true;
+    } return false;
 }
 
-void state_machine::change_state() {
+void state_machine::change_state(Board& _board) {
     if (state == on) {
         state = off;
         digitalWrite(13, LOW);

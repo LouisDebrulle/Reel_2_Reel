@@ -3,23 +3,28 @@
 #include "linear_speed_curve.h"
 #include "state_machine.h"
 #include "board.h"
+#include "pin.h"
 
 
 unsigned long lDt = 100;
-const int status_pin = 18;
-const int encoderPinA = 2;
-const int encoderPinB = 3;
-const int pwmPin = 5;
+
+
+
+
+
 
 
 
 
  
 
-Board _board(encoderPinA, encoderPinB, pwmPin);
-state_machine kernel(_board);
+Board _board;
+Motor _motor1(_board);
+Motor _motor2(_board);
 
-double times[] = {10*1e3, 50*1e3}; 
+state_machine kernel;
+
+double times[] = {0, 50*1e3}; 
 double speeds[] = {700, 300};                                                     
 lin_speed_curve _speed_curve(times, speeds, 2); 
 
@@ -30,7 +35,7 @@ void encoder_step() {
 }
 
 void check_status(){
-  kernel.change_state(); 
+  kernel.change_state(_board); 
 }
 
 
@@ -39,23 +44,20 @@ void setup() {
 
 Serial.begin(9600);
 _board.init();
-
+attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
-attachInterrupt(digitalPinToInterrupt(status_pin), check_status, CHANGE);
+
+
 
 }
   
+void main_loop(){
 
-
-
-
-void loop() {
-
-  kernel.step();
 
   double time = millis();
   double speed =_board._encoder.get_speed();
   int duty_cycle = _speed_curve.getSpeedAtTime(time);
+  _motor1.set_speed(300);
 
   Serial.print(time);
   Serial.print(" ,");
@@ -63,7 +65,20 @@ void loop() {
   Serial.print(" ,");
   Serial.println(speed);
 
-   _board._pwm.set_dc(duty_cycle);
+   
 
   delay(lDt);
+};
+
+
+
+void loop() {
+
+
+  if (kernel.step())
+  {
+    main_loop();
+  }
+  
+  
 }

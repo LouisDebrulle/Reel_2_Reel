@@ -3,6 +3,7 @@
 
 #include "Encoder.h" 
 #include "pwm.h"
+#include "pin.h"
 
 
 
@@ -11,11 +12,23 @@ class Board {
 
 public:
 
-    Encoder _encoder;
-    pwm_tim_1 _pwm;
-    Board(int encoderPinA, int encoderPinB, int pwmPin)
-        : _encoder(encoderPinA, encoderPinB), _pwm(pwmPin) {}
+    Encoder _encoder = Encoder(encoderPinA, encoderPinB);
+    pwm_tim_1 _pwm = pwm_tim_1(motor1_speed_pin, motor2_speed_pin);
 
+    
+
+    struct
+    {
+        int speed_pin;
+        int out_pin;
+        int enable_pin;
+    }motor1 = {.speed_pin = motor1_speed_pin, 
+                .out_pin = motor1_out_pin,
+                .enable_pin = motor1_enable_pin},
+    motor2 = {.speed_pin = motor2_speed_pin, 
+                .out_pin = motor2_speed_pin,
+                .enable_pin = motor2_speed_pin};
+    
     void init() {
         _pwm.innit();
         _encoder.innit();
