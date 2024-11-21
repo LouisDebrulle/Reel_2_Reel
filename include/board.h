@@ -26,13 +26,14 @@ public:
                 .out_pin = motor1_out_pin,
                 .enable_pin = motor1_enable_pin},
     motor2 = {.speed_pin = motor2_speed_pin, 
-                .out_pin = motor2_speed_pin,
-                .enable_pin = motor2_speed_pin};
+                .out_pin = motor2_out_pin,
+                .enable_pin = motor2_enable_pin};
     
     void init() {
         _pwm.innit();
         _encoder.innit();
         pinMode(13, OUTPUT); 
+        
     }
 
     void blink(){

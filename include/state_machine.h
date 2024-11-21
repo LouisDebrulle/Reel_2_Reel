@@ -15,16 +15,18 @@ public:
     };
     status state;
 
-
+    unsigned long last_time;
     state_machine();
     bool step();
     void change_state(Board& _board);
+    double get_time();
 };
 
 
 state_machine::state_machine() 
 {
   state = off;
+  last_time = 0;
 }
 
 bool state_machine::step(){
@@ -37,11 +39,20 @@ void state_machine::change_state(Board& _board) {
     if (state == on) {
         state = off;
         digitalWrite(13, LOW);
+        digitalWrite(_board.motor1.enable_pin, HIGH);
+        digitalWrite(_board.motor2.enable_pin, HIGH);
         _board.init();
     } else {
+        last_time = millis();
         state = on;
         digitalWrite(13, HIGH);
+        
     }
+}
+
+double state_machine::get_time(){
+    double current_time = millis();
+    return current_time - last_time;
 }
 
 #endif

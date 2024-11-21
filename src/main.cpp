@@ -9,15 +9,6 @@
 unsigned long lDt = 100;
 
 
-
-
-
-
-
-
-
- 
-
 Board _board;
 Motor _motor1(_board);
 Motor _motor2(_board);
@@ -25,7 +16,7 @@ Motor _motor2(_board);
 state_machine kernel;
 
 double times[] = {0, 50*1e3}; 
-double speeds[] = {700, 300};                                                     
+double speeds[] = {0, 9000};                                                     
 lin_speed_curve _speed_curve(times, speeds, 2); 
 
 
@@ -41,31 +32,24 @@ void check_status(){
 
 
 void setup() {
-
 Serial.begin(9600);
 _board.init();
 attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
-
-
-
 }
-  
+ 
+ 
 void main_loop(){
-
-
-  double time = millis();
+  double time = kernel.get_time();
   double speed =_board._encoder.get_speed();
   int duty_cycle = _speed_curve.getSpeedAtTime(time);
-  _motor1.set_speed(300);
+  _motor1.set_speed(duty_cycle, duty_cycle);
 
-  Serial.print(time);
+  Serial.print(time/1000);
   Serial.print(" ,");
-  Serial.print(duty_cycle);
+  Serial.print(duty_cycle/100);
   Serial.print(" ,");
   Serial.println(speed);
-
-   
 
   delay(lDt);
 };
@@ -74,11 +58,9 @@ void main_loop(){
 
 void loop() {
 
-
   if (kernel.step())
   {
     main_loop();
   }
-  
   
 }

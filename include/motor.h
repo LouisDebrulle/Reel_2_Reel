@@ -11,7 +11,7 @@ private:
 public:
     Board& _board;
 
-    void set_speed(double speed);
+    void set_speed(double speed1, double speed2);
     void enable_motor(bool motor_state);
     Motor(Board& board);
     
@@ -28,8 +28,8 @@ void Motor::enable_motor(bool motor_state){
     digitalWrite(_board.motor1.enable_pin, HIGH);
 }
 
-void Motor::set_speed(double speed){
-    _board._pwm.set_dc(300, 700);
+void Motor::set_speed(double speed1, double speed2){
+    _board._pwm.set_dc(speed1, speed2);
 }
 
 
