@@ -30,7 +30,7 @@ void pwm_tim_1::innit() {
     pinMode(pin2, OUTPUT);
     TCCR4A = _BV(COM4A1) | _BV(COM4B1) | _BV(WGM41);
     TCCR4B = _BV(WGM43) | _BV(WGM42) | _BV(CS40);
-    ICR4 = 10000;
+    ICR4 = 799;//10000;
     OCR4A = 0;
     OCR4B = 0;
 }

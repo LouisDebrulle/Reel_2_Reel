@@ -2,6 +2,7 @@
 #define PINS_H
 
 const int on_off_pin = 18;
+const int start_motor_pin = 19;
 
 // encoder pin
 const int encoderPinA = 2;
@@ -14,7 +15,10 @@ const int motor2_out_pin = 10;
 const int motor1_speed_pin = 6;
 const int motor2_speed_pin = 7;
 
-const int motor1_enable_pin = 24;
-const int motor2_enable_pin = 26;
+const int motor1_break_pin = 24;
+const int motor2_break_pin = 26;
+
+const int motor1_energize_pin = 28;
+const int motor2_energize_pin = 30;
 
 #endif // PINS_H

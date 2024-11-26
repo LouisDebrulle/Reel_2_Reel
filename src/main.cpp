@@ -1,5 +1,6 @@
 #include <Arduino.h>
 
+
 #include "linear_speed_curve.h"
 #include "state_machine.h"
 #include "board.h"
@@ -8,15 +9,13 @@
 
 unsigned long lDt = 100;
 
-
 Board _board;
 Motor _motor1(_board);
-Motor _motor2(_board);
 
-state_machine kernel;
+state_machine kernel(_board);
 
 double times[] = {0, 50*1e3}; 
-double speeds[] = {0, 9000};                                                     
+double speeds[] = {300, 200};                                                     
 lin_speed_curve _speed_curve(times, speeds, 2); 
 
 
@@ -26,16 +25,26 @@ void encoder_step() {
 }
 
 void check_status(){
-  kernel.change_state(_board); 
+  kernel.change_state(); 
 }
 
+void start_motor() {
+  // kernel.change_state()
+}
+
+
+ 
 
 
 void setup() {
 Serial.begin(9600);
-_board.init();
-attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
+
+ _motor1.init();
+  _board.init();
+
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
+attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
+attachInterrupt(digitalPinToInterrupt(start_motor_pin), start_motor, RISING);
 }
  
  
@@ -47,7 +56,7 @@ void main_loop(){
 
   Serial.print(time/1000);
   Serial.print(" ,");
-  Serial.print(duty_cycle/100);
+  Serial.print(double(duty_cycle)/100.0);
   Serial.print(" ,");
   Serial.println(speed);
 

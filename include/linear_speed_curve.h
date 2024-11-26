@@ -18,7 +18,7 @@ class lin_speed_curve {
       }
 
       if (time >= times[numPoints - 1]) {
-        return 0;
+        return speeds[numPoints - 1];
       }
 
       for (int i = 1; i < numPoints; i++) {
