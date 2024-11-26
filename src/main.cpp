@@ -1,5 +1,5 @@
 #include <Arduino.h>
-
+#include <TimerOne.h>
 
 #include "linear_speed_curve.h"
 #include "state_machine.h"
@@ -7,7 +7,7 @@
 #include "pin.h"
 
 
-unsigned long lDt = 100;
+unsigned long lDt = 50*1e3;
 
 Board _board;
 Motor _motor1(_board);
@@ -33,23 +33,11 @@ void start_motor() {
 }
 
 
- 
+ void main_loop(){
 
-
-void setup() {
-Serial.begin(9600);
-
- _motor1.init();
-  _board.init();
-
-attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
-attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
-attachInterrupt(digitalPinToInterrupt(start_motor_pin), start_motor, RISING);
-}
- 
- 
-void main_loop(){
-  double time = kernel.get_time();
+  if (kernel.step())
+  {
+    double time = kernel.get_time();
   double speed =_board._encoder.get_speed();
   int duty_cycle = _speed_curve.getSpeedAtTime(time);
   _motor1.set_speed(duty_cycle, duty_cycle);
@@ -59,17 +47,29 @@ void main_loop(){
   Serial.print(double(duty_cycle)/100.0);
   Serial.print(" ,");
   Serial.println(speed);
-
-  delay(lDt);
+  }
+  
 };
+
+
+void setup() {
+Serial.begin(9600);
+Timer1.initialize(lDt); 
+Timer1.attachInterrupt(main_loop);
+
+_motor1.init();
+_board.init();
+
+attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
+attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
+attachInterrupt(digitalPinToInterrupt(start_motor_pin), start_motor, RISING);
+}
+ 
+ 
+
 
 
 
 void loop() {
 
-  if (kernel.step())
-  {
-    main_loop();
-  }
-  
 }
