@@ -7,7 +7,7 @@
 #include "pin.h"
 
 
-unsigned long lDt = 50*1e3;
+unsigned long lDt = 100*1e3;
 
 Board _board;
 Motor _motor1(_board);
@@ -37,8 +37,11 @@ void start_motor() {
 
   if (kernel.step())
   {
-    double time = kernel.get_time();
+  double time = kernel.get_time();
+  int pulse_count = _board._encoder.get_puls_count();
+  int pulse_sum = _board._encoder.get_puls_sum();
   double speed =_board._encoder.get_speed();
+  
   int duty_cycle = _speed_curve.getSpeedAtTime(time);
   _motor1.set_speed(duty_cycle, duty_cycle);
 
@@ -46,7 +49,11 @@ void start_motor() {
   Serial.print(" ,");
   Serial.print(double(duty_cycle)/100.0);
   Serial.print(" ,");
-  Serial.println(speed);
+  Serial.print(speed);
+  Serial.print(" ,");
+  Serial.print(pulse_count);
+  Serial.print(" ,");
+  Serial.println(_board._encoder.get_pulse_interval());
   }
   
 };
