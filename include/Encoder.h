@@ -56,9 +56,16 @@ Encoder::Encoder(int A_pin, int B_pin)
 
 double Encoder::get_speed(){
     double average_time = _buffer.get_average();
-    double speed = (60.0 * 1e3) / (double(pulses_per_rev) * average_time);
+    if (average_time == 0)
+    {return 0;}
+    else
+    {
+       double speed = (60.0 * 1e3) / (double(pulses_per_rev) * average_time);
     _buffer.clear();
     return speed;
+    }
+    
+    
 }
 
 int Encoder::get_puls_count(){
