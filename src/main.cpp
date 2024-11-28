@@ -14,8 +14,8 @@ Motor _motor1(_board);
 
 state_machine kernel(_board);
 
-double times[] = {0, 50*1e3}; 
-double speeds[] = {300, 200};                                                     
+double times[] = {0, 10*1e3}; 
+double speeds[] = {300, 205};                                                     
 lin_speed_curve _speed_curve(times, speeds, 2); 
 
 
@@ -38,12 +38,12 @@ void start_motor() {
   if (kernel.step())
   {
   double time = kernel.get_time();
-  int pulse_count = _board._encoder.get_puls_count();
-  int pulse_sum = _board._encoder.get_puls_sum();
   double speed =_board._encoder.get_speed();
   
   int duty_cycle = _speed_curve.getSpeedAtTime(time);
   _motor1.set_speed(duty_cycle, duty_cycle);
+
+  double pos = _board._pos_sensor.get_pos();
 
   Serial.print(time/1000);
   Serial.print(" ,");
@@ -51,9 +51,9 @@ void start_motor() {
   Serial.print(" ,");
   Serial.print(speed);
   Serial.print(" ,");
-  Serial.print(pulse_count);
-  Serial.print(" ,");
-  Serial.println(_board._encoder.get_pulse_interval());
+  Serial.println(pos);
+  
+  
   }
   
 };

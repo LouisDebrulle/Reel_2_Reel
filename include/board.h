@@ -4,6 +4,7 @@
 #include "Encoder.h" 
 #include "pwm.h"
 #include "pin.h"
+#include "pos_sensor.h"
 
 
 
@@ -14,6 +15,8 @@ public:
 
     Encoder _encoder = Encoder(encoderPinA, encoderPinB);
     pwm_tim_1 _pwm = pwm_tim_1(motor1_speed_pin, motor2_speed_pin);
+    pos_sensor _pos_sensor = pos_sensor(sensor_pos_pin, sensor_neg_pin);
+
 
     
 
@@ -35,6 +38,7 @@ public:
     void init() {
         _pwm.innit();
         _encoder.innit();
+        _pos_sensor.innit();
         pinMode(13, OUTPUT); 
         
     }

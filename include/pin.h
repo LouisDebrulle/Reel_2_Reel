@@ -1,12 +1,17 @@
 #ifndef PINS_H
 #define PINS_H
 
+// digital pins
 const int on_off_pin = 18;
 const int start_motor_pin = 19;
 
 // encoder pin
 const int encoderPinA = 2;
 const int encoderPinB = 3;
+
+// sensor pin
+const int sensor_pos_pin = A4;
+const int sensor_neg_pin = A5;
 
 // motor pins
 const int motor1_out_pin = 9;
