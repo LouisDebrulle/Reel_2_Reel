@@ -60,7 +60,7 @@ double Encoder::get_speed(){
     {return 0;}
     else
     {
-       double speed = (60.0 * 1e3) / (double(pulses_per_rev) * average_time);
+        double speed = (60.0 * 1e3) / (double(pulses_per_rev) * average_time);
     _buffer.clear();
     return speed;
     }

@@ -16,6 +16,8 @@ public:
     void add(int number);
     void clear();
     double get_average();
+    
+
     int get_count();
     int get_sum();
 };
@@ -36,8 +38,9 @@ void buffer::add(int number) {
         count += 1;
         sum += number;
     } 
-    
 }
+
+
 
 void buffer::clear() {
     count = 0;
