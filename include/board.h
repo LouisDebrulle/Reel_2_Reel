@@ -28,11 +28,11 @@ public:
         int energize_pin;
     }motor1 = {.speed_pin = motor1_speed_pin, 
                 .out_pin = motor1_out_pin,
-                .break_pin = motor1_break_pin,
+                .break_pin = motor1_dir_pin,
                 .energize_pin = motor1_energize_pin},
     motor2 = {.speed_pin = motor2_speed_pin, 
                 .out_pin = motor2_out_pin,
-                .break_pin = motor2_break_pin,
+                .break_pin = motor2_dir_pin,
                 .energize_pin = motor2_energize_pin};
     
     void init() {

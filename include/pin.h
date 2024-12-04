@@ -20,8 +20,8 @@ const int motor2_out_pin = 10;
 const int motor1_speed_pin = 6;
 const int motor2_speed_pin = 7;
 
-const int motor1_break_pin = 24;
-const int motor2_break_pin = 26;
+const int motor1_dir_pin = 24;
+const int motor2_dir_pin = 26;
 
 const int motor1_energize_pin = 28;
 const int motor2_energize_pin = 30;

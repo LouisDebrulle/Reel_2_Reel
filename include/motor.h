@@ -20,9 +20,7 @@ public:
 
 void Motor::init(){
     pinMode(_board.motor1.energize_pin, OUTPUT);
-    pinMode(_board.motor1.break_pin, OUTPUT);
     digitalWrite(_board.motor1.energize_pin, HIGH);
-    digitalWrite(_board.motor1.break_pin, HIGH);
 }
 
 Motor::Motor(Board& board):_board(board)

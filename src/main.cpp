@@ -17,7 +17,7 @@ Motor _motor1(_board);
 state_machine kernel(_board);
 
 double times[] = {0, 50*1e3}; 
-double speeds[] = {100, 100};                                                     
+double speeds[] = {5000, 5000};                                                     
 lin_speed_curve _speed_curve(times, speeds, 2); 
 
 mv_average_filter<double,filter_size> speed_filter;
@@ -31,34 +31,48 @@ void check_status(){
   kernel.change_state(); 
 }
 
-void start_motor() {
-  // kernel.change_state()
-}
+
 
 
  void main_loop(){
 
-  if (kernel.step())
+  switch (kernel.state)
   {
-  double time = kernel.get_time();
-  double speed =_board._encoder.get_speed();
-  speed_filter.push(speed);
-  
-  int duty_cycle = _speed_curve.getSpeedAtTime(time);
-  _motor1.set_speed(duty_cycle, duty_cycle);
+  case off:
+    digitalWrite(13, LOW);
+    digitalWrite(_board.motor1.energize_pin, LOW);
+    digitalWrite(_board.motor2.energize_pin, LOW);
+    _board.init();
+    break;
 
-  double pos = _board._pos_sensor.get_pos();
 
-  Serial.print(time/1000);
-  Serial.print(" ,");
-  Serial.print(double(duty_cycle)/ICR4*100);
-  Serial.print(" ,");
-  Serial.print(speed_filter.get_average());
-  Serial.print(" ,");
-  Serial.println(pos);
-  
-  
+  case on:
+    digitalWrite(13, HIGH);
+    digitalWrite(_board.motor1.energize_pin, HIGH);
+    digitalWrite(_board.motor2.energize_pin, HIGH);
+    _board.init();
+    break;
+
+  case running:
+    double time = kernel.get_time();
+    double speed =_board._encoder.get_speed();
+    speed_filter.push(speed);
+    
+    int duty_cycle = _speed_curve.getSpeedAtTime(time);
+    _motor1.set_speed(duty_cycle, duty_cycle);
+
+    double pos = _board._pos_sensor.get_pos();
+
+    Serial.print(time/1000);
+    Serial.print(" ,");
+    Serial.print(double(duty_cycle)/ICR4*100);
+    Serial.print(" ,");
+    Serial.print(speed_filter.get_average());
+    Serial.print(" ,");
+    Serial.println(pos);
+    break;
   }
+ 
   
 };
 
@@ -70,10 +84,17 @@ Timer1.attachInterrupt(main_loop);
 
 _motor1.init();
 _board.init();
-
+kernel.change_state();
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
 attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
-attachInterrupt(digitalPinToInterrupt(start_motor_pin), start_motor, RISING);
+attachInterrupt(digitalPinToInterrupt(start_motor_pin), check_status, CHANGE);
+
+while (digitalRead(on_off_pin) || digitalRead(start_motor_pin) )
+{
+  Serial.println("power off");
+  delay(5000);
+}
+
 }
  
  
