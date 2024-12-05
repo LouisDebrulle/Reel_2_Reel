@@ -16,9 +16,9 @@ Motor _motor1(_board);
 
 state_machine kernel(_board);
 
-double times[] = {0, 50*1e3}; 
-double speeds[] = {5000, 5000};                                                     
-lin_speed_curve _speed_curve(times, speeds, 2); 
+double times[] = {0, 100*1e3}; 
+double speeds[] = {0, 2};                                                     
+lin_speed_curve _speed_curve(times, speeds, sizeof(times)/sizeof(times[0])); 
 
 mv_average_filter<double,filter_size> speed_filter;
 
@@ -58,18 +58,19 @@ void check_status(){
     double speed =_board._encoder.get_speed();
     speed_filter.push(speed);
     
-    int duty_cycle = _speed_curve.getSpeedAtTime(time);
-    _motor1.set_speed(duty_cycle, duty_cycle);
+    double speed_des = _speed_curve.getSpeedAtTime(time);
+    int dc = _motor1.get_dc(speed_des);
+    _motor1.set_speed(dc, speed_des);
 
-    double pos = _board._pos_sensor.get_pos();
+    // double pos = _board._pos_sensor.get_pos();
 
     Serial.print(time/1000);
     Serial.print(" ,");
-    Serial.print(double(duty_cycle)/ICR4*100);
+    Serial.print(speed_des);
     Serial.print(" ,");
-    Serial.print(speed_filter.get_average());
-    Serial.print(" ,");
-    Serial.println(pos);
+    Serial.println(speed_filter.get_average());
+    
+   
     break;
   }
  

@@ -12,7 +12,7 @@ class lin_speed_curve {
       numPoints = size;
     }
 
-    int getSpeedAtTime(double time) {
+    double getSpeedAtTime(double time) {
       if (time <= times[0]) {
         return 0; 
       }
