@@ -1,19 +1,61 @@
 import serial
 import csv
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
-def readserial(comport, baudrate, csv_filename):
-    ser = serial.Serial(comport, baudrate, timeout=0.1)  
+serial_port = "COM4"
+baud_rate = 9600
+
+try:
+    ser = serial.Serial(serial_port, baud_rate)
+    print(f"Connected to {serial_port} at {baud_rate} baud.")
+except serial.SerialException as e:
+    print(f"Error opening serial port: {e}")
+    exit()
+
+csv_file = open('output/data.csv', mode='w', newline='')
+csv_writer = csv.writer(csv_file)
+csv_writer.writerow(['Time', 'Speed_desd', 'Speed'])
+
+fig, ax = plt.subplots()
+t = []
+speed_des = []
+speed = []
+
+line1, = ax.plot([], [], label='Speed_desd', color='red')
+line2, = ax.plot([], [], label='Speed', color='blue')
+
+ax.set_xlabel('Time (s)')
+ax.set_ylabel('Speed')
+ax.set_title('Real-Time Motor Data')
+ax.legend()
+
+
+def update(frame):
+
+    line = ser.readline().decode('utf-8').strip()
+    values = line.split(',')
     
-    with open(csv_filename, mode='w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
+    if len(values) == 3:
+        t.append(float(values[0]))
+        speed_des.append(float(values[1]))
+        speed.append(float(values[2]))
         
-        while True:
-            data = ser.readline().decode().strip()
-            if data:
-                print(data)  
-                csv_writer.writerow([data])  
+        #t = t[-100:]
+        #speed_des = speed_des[-100:]
+        #speed = speed[-100:]
+       
+        plt.cla()
+        plt.plot(t,speed_des, color = "blue", label = "speed desired")
+        plt.plot(t,speed, color = "red", label = "speed")
+    return        
 
-if __name__ == '__main__':
-    readserial('COM4', 9600, r'Z:\Software\Reel_2_Reel\output\output_data.csv')
 
 
+ani = FuncAnimation(fig, update, interval=100)
+plt.show()
+
+csv_writer.writerow([t, speed_des, speed])
+ser.close()
+csv_file.close()
+print("Serial connection and CSV file closed.")
