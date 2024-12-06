@@ -4,7 +4,7 @@ clear all; close all; clc;
 %%
 data = readtable('data.csv'); 
 t = data.Time;
-speed_des = data.Speed_desd;
+speed_des = data.Speed_des;
 speed = data.Speed;
 
 %%
