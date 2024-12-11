@@ -17,11 +17,11 @@ Motor _motor1(_board);
 PID _pid(100,0.01,0,0, 10000);
 state_machine kernel(_board);
 
-double times[] = {0, 10*1e3};//{0, 10*1e3, 10*1e3, 20*1e3, 20*1e3, 30*1e3, 30*1e3, 40*1e3}; 
-double speeds[] = {1,1}; //{0.3, 0.3, 0.6, 0.6, 0.8, 0.8, 1, 1};                                                     
+double times[] = {0, 10*1e3}; //{0, 10*1e3, 30*1e3, 40*1e3}; // {0, 10*1e3, 10*1e3, 20*1e3, 20*1e3, 30*1e3, 30*1e3, 40*1e3, 40*1e3, 50*1e3}; 
+double speeds[] = {2, 2}; //{0, 1, 1, 0}; //{0.2, 0.2, 0.4, 0.4, 0.6, 0.6, 0.8, 0.8, 1, 1}; //{20, 20, 40, 40, 60, 60, 80, 80, 100, 100};                                                     
 lin_speed_curve _speed_curve(times, speeds, sizeof(times)/sizeof(times[0])); 
 
-mv_average_filter<double,filter_size> speed_filter;
+mv_average_filter speed_filter(filter_size);
 
 
 void encoder_step() {
@@ -30,6 +30,10 @@ void encoder_step() {
 
 void check_status(){
   kernel.change_state(); 
+}
+
+void motor_feedback(){
+  _motor1.measure_feedback();
 }
 
 
@@ -52,6 +56,8 @@ void check_status(){
     digitalWrite(_board.motor1.energize_pin, HIGH);
     digitalWrite(_board.motor2.energize_pin, HIGH);
     _board.init();
+    speed_filter.init();
+
     break;
 
   case running:
@@ -61,21 +67,25 @@ void check_status(){
     double speed_smooth = speed_filter.get_average();
     
     double speed_des = _speed_curve.getSpeedAtTime(time);
+    double motor_fb_speed = _motor1.get_speed_feedback();
     //float dc = _pid.output(speed_des, speed_smooth);
     int dc = _motor1.get_dc(speed_des);
     _motor1.set_speed(int(dc), 0);
 
     double pos = _board._pos_sensor.get_pos();
 
+    /*
     Serial.print(time/1000);
     Serial.print(" ,");
     Serial.print(speed_des);
     Serial.print(" ,");
-    Serial.print(speed_smooth);
+    Serial.print(speed, 4);
     Serial.print(" ,");
-    Serial.print(double(dc)/ICR4 *100); // 
-    Serial.print(" ,");
-    Serial.println(pos);
+    Serial.println(speed_smooth);
+    */
+    
+    //Serial.print(double(dc)/ICR4 *100); // 
+    
     
    
     break;
@@ -100,7 +110,7 @@ attachInterrupt(digitalPinToInterrupt(start_motor_pin), check_status, CHANGE);
 while (digitalRead(on_off_pin) || digitalRead(start_motor_pin) )
 {
   Serial.println("power off");
-  delay(5000);
+  delay(1000);
 }
 
 }

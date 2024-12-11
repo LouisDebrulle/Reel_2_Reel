@@ -14,6 +14,8 @@ public:
     const int A_pin;  
     const int B_pin;
 
+    double speed;
+
     const int pulses_per_rev = 2048; 
     buffer _buffer;
     unsigned long last_pulse_time;
@@ -33,14 +35,15 @@ public:
 void Encoder::step() {
     unsigned long current_time = millis();
     pulse_interval = current_time - last_pulse_time;
+
+    double pulse_speed = (60.0 * 1e3) / (double(pulses_per_rev) * pulse_interval);
     
     last_pulse_time = current_time;
 
-    
     if (digitalRead(B_pin) == HIGH) {
-        _buffer.add(pulse_interval);  
+        _buffer.add(pulse_speed);  
     } else {
-        _buffer.add(-pulse_interval);
+        _buffer.add(-pulse_speed);
     }
 }
 
@@ -55,14 +58,20 @@ Encoder::Encoder(int A_pin, int B_pin)
 
 
 double Encoder::get_speed(){
-    double average_time = _buffer.get_average();
-    if (average_time == 0)
-    {return 0;}
+    double average_speed = _buffer.get_average();
+    if (average_speed == 0)
+    {Serial.println(" 0"); return 0;}
     else
     {
-        double speed = (60.0 * 1e3) / (double(pulses_per_rev) * average_time);
+        Serial.print("average: "); Serial.println(average_speed);
+    for (int i = 0; i < _buffer.get_count(); i++)
+    {
+        Serial.print(_buffer.data[i]); Serial.print(" , ");
+    }
+    Serial.println(" ");
+    
     _buffer.clear();
-    return speed;
+    return average_speed;
     }
     
     

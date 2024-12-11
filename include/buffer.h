@@ -4,16 +4,17 @@
 #include <Arduino.h>
 
 class buffer {
-private:
-    static const int MAX_SIZE = 100;
-    int data[MAX_SIZE];
-    int count;
-    int sum;
-
+//private:
 public:
+    static const int MAX_SIZE = 100;
+    double data[MAX_SIZE];
+    int count;
+    double sum;
+
+
     buffer();
 
-    void add(int number);
+    void add(double number);
     void clear();
     double get_average();
     
@@ -32,7 +33,7 @@ buffer::buffer() {
 
 
 
-void buffer::add(int number) {
+void buffer::add(double number) {
     if (count < MAX_SIZE) {
         data[count] = number;
         count += 1;
@@ -54,7 +55,7 @@ double buffer::get_average() {
     if (count == 0) {
         return 0.0;
     }
-    return (double)sum / count;
+    return sum / count;
 }
 
 int buffer::get_count(){
