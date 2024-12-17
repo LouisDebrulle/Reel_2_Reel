@@ -48,7 +48,7 @@ def update(frame):
         pos_curr = float(values[4])
 
         # Write to CSV
-        #csv_writer.writerow([t_curr, speed_des_curr, speed_curr, duty_cycle_curr, pos_curr])
+        csv_writer.writerow([t_curr, speed_des_curr, speed_curr, duty_cycle_curr, pos_curr])
 
         # Append to lists
         t.append(t_curr)
@@ -58,11 +58,11 @@ def update(frame):
         pos.append(pos_curr)
 
         # Keep only the last 100 points
-        t = t[-100:]
-        speed_des = speed_des[-100:]
-        speed = speed[-100:]
-        duty_cycle = duty_cycle[-100:]
-        pos = pos[-100:]
+        t = t[-500:]
+        speed_des = speed_des[-500:]
+        speed = speed[-500:]
+        duty_cycle = duty_cycle[-500:]
+        pos = pos[-500:]
 
         # Clear and update each subplot
         ax[0, 0].cla()
