@@ -1,4 +1,5 @@
-
+#ifndef LIN_SPEED_CURVE
+#define LIN_SPEED_CURVE
 
 class lin_speed_curve {
   public:
@@ -35,3 +36,5 @@ class lin_speed_curve {
 
     }
 };
+
+#endif

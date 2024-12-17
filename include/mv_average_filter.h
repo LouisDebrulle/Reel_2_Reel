@@ -1,21 +1,24 @@
 #ifndef MV_AVERAGE_FILTER_H
 #define MV_AVERAGE_FILTER_H
 
-template <typename T, int MAX_SIZE>
 class mv_average_filter {
 private:
-    T data[MAX_SIZE];
+    int MAX_SIZE; // Define a fixed size
+    double* data;
     int count;
 
 public:
-    mv_average_filter() : count(0) {}
+    mv_average_filter(int _max_size) : count(0), MAX_SIZE(_max_size) {
+        data = new double[MAX_SIZE];
+    }
 
-    void push(T value) {
+    void push(double value) {
         if (count == MAX_SIZE) {
+            // Shift the elements to make space for the new value
             for (int i = MAX_SIZE - 1; i > 0; --i) {
                 data[i] = data[i - 1];
             }
-            data[0] = value;
+            data[0] = value; // Add the new value at the start
         } else {
             for (int i = count; i > 0; --i) {
                 data[i] = data[i - 1];
@@ -29,13 +32,20 @@ public:
         return count;
     }
 
-    T get_average() const {
-        if (count == 0) return T(); // Return default value if filter is empty
-        T sum = 0;
+    double get_average() const {
+        if (count == 0) return 0.0; // Return 0.0 if the filter is empty
+        double sum = 0.0;
         for (int i = 0; i < count; ++i) {
             sum += data[i];
         }
         return sum / count;
+    }
+
+    void init() {
+        count = 0; // Reset count to zero
+        for (int i = 0; i < MAX_SIZE; ++i) {
+            data[i] = 0.0; // Clear the buffer
+        }
     }
 };
 

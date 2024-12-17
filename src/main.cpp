@@ -10,15 +10,15 @@
 
 
 unsigned long lDt = 100*1e3;
-const int filter_size = 10;
+const int filter_size = 30;
 
 Board _board;
 Motor _motor1(_board);
 PID _pid(100,0.01,0,0, 10000);
 state_machine kernel(_board);
 
-double times[] = {0, 10*1e3}; //{0, 10*1e3, 30*1e3, 40*1e3}; // {0, 10*1e3, 10*1e3, 20*1e3, 20*1e3, 30*1e3, 30*1e3, 40*1e3, 40*1e3, 50*1e3}; 
-double speeds[] = {2, 2}; //{0, 1, 1, 0}; //{0.2, 0.2, 0.4, 0.4, 0.6, 0.6, 0.8, 0.8, 1, 1}; //{20, 20, 40, 40, 60, 60, 80, 80, 100, 100};                                                     
+double times[] = {0, 10*1e3}; //{0, 10*1e3, 10*1e3, 20*1e3, 20*1e3, 30*1e3, 30*1e3, 40*1e3, 40*1e3, 50*1e3}; 
+double speeds[] = {100, 100}; //{20, 20, 40, 40, 60, 60, 80, 80, 100, 100};                                                     
 lin_speed_curve _speed_curve(times, speeds, sizeof(times)/sizeof(times[0])); 
 
 mv_average_filter speed_filter(filter_size);
@@ -74,15 +74,15 @@ void motor_feedback(){
 
     double pos = _board._pos_sensor.get_pos();
 
-    /*
+    
     Serial.print(time/1000);
     Serial.print(" ,");
-    Serial.print(speed_des);
+    Serial.print(speed_des/100);
     Serial.print(" ,");
     Serial.print(speed, 4);
     Serial.print(" ,");
     Serial.println(speed_smooth);
-    */
+    
     
     //Serial.print(double(dc)/ICR4 *100); // 
     

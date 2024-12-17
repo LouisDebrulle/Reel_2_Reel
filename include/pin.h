@@ -2,8 +2,8 @@
 #define PINS_H
 
 // digital pins
-const int on_off_pin = 18;
-const int start_motor_pin = 19;
+const int on_off_pin = 19;
+const int start_motor_pin = 20;
 
 // encoder pin
 const int encoderPinA = 2;
