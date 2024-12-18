@@ -20,9 +20,11 @@ pwm_tim_1::pwm_tim_1(int _pin1, int _pin2)
     pin2 = _pin2; 
 }
 
-void pwm_tim_1::set_dc(int duty_cycle_a, int duty_cycle_b) {
-    OCR4A = duty_cycle_a;
-    OCR4B = duty_cycle_b;
+void pwm_tim_1::set_dc(int value, int pin) {
+    if (pin == pin1) {OCR4A = value;}
+    else if (pin == pin1){OCR4B = value;}
+    else {return;}
+    
 }
 
 void pwm_tim_1::innit() {

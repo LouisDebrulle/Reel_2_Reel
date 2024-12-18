@@ -14,7 +14,7 @@ class Board {
 public:
 
     Encoder _encoder = Encoder(encoderPinA, encoderPinB);
-    pwm_tim_1 _pwm = pwm_tim_1(motor1_speed_pin, motor2_speed_pin);
+    pwm_tim_1 _pwm = pwm_tim_1(motor1_control_pin, motor2_control_pin);
     pos_sensor _pos_sensor = pos_sensor(sensor_pos_pin, sensor_neg_pin);
 
 
@@ -22,17 +22,17 @@ public:
 
     struct
     {
-        int speed_pin;
-        int out_pin;
-        int break_pin;
+        int control_pin;
+        int feedback_pin;
+        int dir_pin;
         int energize_pin;
-    }motor1 = {.speed_pin = motor1_speed_pin, 
-                .out_pin = motor1_out_pin,
-                .break_pin = motor1_dir_pin,
+    }motor1 = {.control_pin = motor1_control_pin, 
+                .feedback_pin = motor1_out_pin,
+                .dir_pin = motor1_dir_pin,
                 .energize_pin = motor1_energize_pin},
-    motor2 = {.speed_pin = motor2_speed_pin, 
-                .out_pin = motor2_out_pin,
-                .break_pin = motor2_dir_pin,
+    motor2 = {.control_pin = motor1_control_pin, 
+                .feedback_pin = motor2_out_pin,
+                .dir_pin = motor2_dir_pin,
                 .energize_pin = motor2_energize_pin};
     
     void init() {

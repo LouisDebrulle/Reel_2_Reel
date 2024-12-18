@@ -7,13 +7,21 @@
 #include "pin.h"
 #include "mv_average_filter.h"
 #include "PID.h"
+#include "speed_motor.h"
+#include "brake_motor.h"
 
 
 unsigned long lDt = 100*1e3;
 const int filter_size = 30;
 
+const int MAX_SPEED = 5;
+const int gear_ratio = 100;
+const int MAX_TORQUE = 10;
+
 Board _board;
-Motor _motor1(_board);
+Speed_motor speed_motor(_board, MAX_SPEED*gear_ratio);
+Breake_motor breake_motor(_board, MAX_TORQUE);
+
 PID _pid(100,0.01,0,0, 10000);
 state_machine kernel(_board);
 
@@ -33,7 +41,7 @@ void check_status(){
 }
 
 void motor_feedback(){
-  _motor1.measure_feedback();
+  speed_motor.measure_feedback();
 }
 
 
@@ -45,8 +53,8 @@ void motor_feedback(){
   {
   case off:
     digitalWrite(13, LOW);
-    digitalWrite(_board.motor1.energize_pin, LOW);
-    digitalWrite(_board.motor2.energize_pin, LOW);
+    speed_motor.enable();
+    breake_motor.enable();
     _board.init();
     break;
 
@@ -67,10 +75,10 @@ void motor_feedback(){
     double speed_smooth = speed_filter.get_average();
     
     double speed_des = _speed_curve.getSpeedAtTime(time);
-    double motor_fb_speed = _motor1.get_speed_feedback();
+    double motor_fb_speed = speed_motor.get_feedback();
     //float dc = _pid.output(speed_des, speed_smooth);
-    int dc = _motor1.get_dc(speed_des);
-    _motor1.set_speed(int(dc), 0);
+    int dc = speed_motor.get_dc(speed_des);
+    speed_motor.set(int(dc));
 
     double pos = _board._pos_sensor.get_pos();
 
@@ -100,7 +108,7 @@ Serial.begin(9600);
 Timer1.initialize(lDt); 
 Timer1.attachInterrupt(main_loop);
 
-_motor1.init();
+speed_motor.init();
 _board.init();
 kernel.change_state();
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);

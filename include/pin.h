@@ -17,8 +17,8 @@ const int sensor_neg_pin = A5;
 const int motor1_out_pin = 9;
 const int motor2_out_pin = 10;
 
-const int motor1_speed_pin = 6;
-const int motor2_speed_pin = 7;
+const int motor1_control_pin = 6;
+const int motor2_control_pin = 7;
 
 const int motor1_dir_pin = 24;
 const int motor2_dir_pin = 26;

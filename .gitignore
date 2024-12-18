@@ -1,2 +1,4 @@
 .pio
 .vscode
+mtr_config/mtr1_config.mtr
+output/data.csv

@@ -5,28 +5,46 @@
 #include "board.h"
 
 class Motor
-{
-private:
-    const int MAX_SPEED = 500;
+{   
+public:
+    int MAX_VALUE;
     int last_time;
     int pulse_intervall;
-public:
+
+    int feedback_pin; int control_pin; int dir_pin; int enable_pin;
     Board& _board;
 
     void init();
-    void set_speed(double speed1, double speed2);
-    int get_dc(double speed);
-    void enable_motor(bool motor_state);
+    void set(double value);
+    void enable();
+
+    int get_dc(double value);
     void measure_feedback();
-    double get_speed_feedback();
-    Motor(Board& board);
+    double get_feedback();
+    Motor(Board& board, int _max_value);
     
 };
 
+
+Motor::Motor(Board& board, int _max_value) :_board(board), MAX_VALUE(_max_value)
+{
+    last_time = 0;
+    pulse_intervall = 0;
+}
+
+void Motor::set(double value){
+    _board._pwm.set_dc(value, control_pin);
+}
+
+
 void Motor::init(){
-    pinMode(_board.motor1.energize_pin, OUTPUT);
-    pinMode(21, INPUT);
-    digitalWrite(_board.motor1.energize_pin, HIGH);
+    pinMode(enable_pin, OUTPUT);
+    pinMode(feedback_pin, INPUT);
+    digitalWrite(enable_pin, HIGH);
+}
+
+void Motor::enable(){
+    digitalWrite(enable_pin, LOW);
 }
 
 void Motor::measure_feedback(){
@@ -35,28 +53,13 @@ void Motor::measure_feedback(){
     last_time = current_time;
 }
 
-double Motor::get_speed_feedback(){
-    return double(pulse_intervall)/2.083 *MAX_SPEED;
-}
-
-Motor::Motor(Board& board):_board(board)
-{
-    last_time = 0;
-    pulse_intervall = 0;
+double Motor::get_feedback(){
+    return double(pulse_intervall)/2.083 *MAX_VALUE;
 }
 
 
-void Motor::enable_motor(bool motor_state){
-    digitalWrite(_board.motor1.break_pin, HIGH);
-}
-
-void Motor::set_speed(double speed1, double speed2){
-
-    _board._pwm.set_dc(speed1, speed2);
-}
-
-int Motor::get_dc(double speed){
-    return int(ICR4/MAX_SPEED *speed);
+int Motor::get_dc(double value){
+    return int(ICR4/MAX_VALUE *value);
 }
 
 
