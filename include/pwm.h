@@ -8,7 +8,7 @@ class pwm_tim_1
 private:
     int pin1, pin2;
 public:
-    void set_dc(int duty_cycle_a, int duty_cycle_b);
+    void set_dc(int value, int pin);
     pwm_tim_1(int _pin1, int _pin2);
     void innit();
 };
@@ -23,7 +23,7 @@ pwm_tim_1::pwm_tim_1(int _pin1, int _pin2)
 
 void pwm_tim_1::set_dc(int value, int pin) {
     if (pin == pin1) {OCR4A = value;}
-    else if (pin == pin1){OCR4B = value;}
+    else if (pin == pin2){OCR4B = value;}
     else {return;}
     
 }
