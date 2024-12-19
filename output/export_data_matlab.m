@@ -2,7 +2,7 @@
 clear all; close all; clc;
 
 %% Parameters
-serialPort = 'COM4';
+serialPort = 'COM13';
 baudRate = 9600;
 
 % Try to open the serial port

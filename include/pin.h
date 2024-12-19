@@ -4,6 +4,7 @@
 // digital pins
 const int on_off_pin = 19;
 const int start_motor_pin = 20;
+const int dir_pin = 21;
 
 // encoder pin
 const int encoderPinA = 2;
@@ -25,5 +26,7 @@ const int motor2_dir_pin = 26;
 
 const int motor1_energize_pin = 28;
 const int motor2_energize_pin = 30;
+
+const int led_pin = 13;
 
 #endif // PINS_H

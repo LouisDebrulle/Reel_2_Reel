@@ -44,6 +44,11 @@ void motor_feedback(){
   speed_motor.measure_feedback();
 }
 
+void change_direction(){
+  speed_motor.change_direction();
+  breake_motor.change_direction();
+}
+
 
 
 
@@ -52,7 +57,7 @@ void motor_feedback(){
   switch (kernel.state)
   {
   case off:
-    digitalWrite(13, LOW);
+    digitalWrite(led_pin, LOW);
     speed_motor.enable();
     breake_motor.enable();
     _board.init();
@@ -60,7 +65,7 @@ void motor_feedback(){
 
 
   case on:
-    digitalWrite(13, HIGH);
+    digitalWrite(led_pin, HIGH);
     digitalWrite(_board.motor1.energize_pin, HIGH);
     digitalWrite(_board.motor2.energize_pin, HIGH);
     _board.init();
@@ -114,6 +119,7 @@ kernel.change_state();
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
 attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
 attachInterrupt(digitalPinToInterrupt(start_motor_pin), check_status, CHANGE);
+attachInterrupt(digitalPinToInterrupt(dir_pin), change_direction, CHANGE);
 
 while (digitalRead(on_off_pin) || digitalRead(start_motor_pin) )
 {

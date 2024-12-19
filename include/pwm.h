@@ -18,6 +18,7 @@ pwm_tim_1::pwm_tim_1(int _pin1, int _pin2)
 {
     pin1 = _pin1; 
     pin2 = _pin2; 
+
 }
 
 void pwm_tim_1::set_dc(int value, int pin) {

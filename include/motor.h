@@ -10,6 +10,7 @@ public:
     int MAX_VALUE;
     int last_time;
     int pulse_intervall;
+    bool direction;
 
     int feedback_pin; int control_pin; int dir_pin; int enable_pin;
     Board& _board;
@@ -17,6 +18,7 @@ public:
     void init();
     void set(double value);
     void enable();
+    void change_direction();
 
     int get_dc(double value);
     void measure_feedback();
@@ -30,6 +32,12 @@ Motor::Motor(Board& board, int _max_value) :_board(board), MAX_VALUE(_max_value)
 {
     last_time = 0;
     pulse_intervall = 0;
+    direction = true;
+
+    pinMode(feedback_pin, INPUT);
+    pinMode(control_pin, OUTPUT);
+    pinMode(dir_pin, OUTPUT);
+    pinMode(enable_pin, OUTPUT);
 }
 
 void Motor::set(double value){
@@ -38,9 +46,12 @@ void Motor::set(double value){
 
 
 void Motor::init(){
-    pinMode(enable_pin, OUTPUT);
-    pinMode(feedback_pin, INPUT);
     digitalWrite(enable_pin, HIGH);
+}
+
+void Motor::change_direction(){
+    direction = !direction;
+    digitalWrite(dir_pin, direction);
 }
 
 void Motor::enable(){
