@@ -33,11 +33,6 @@ Motor::Motor(Board& board, int _max_value) :_board(board), MAX_VALUE(_max_value)
     last_time = 0;
     pulse_intervall = 0;
     direction = true;
-
-    pinMode(feedback_pin, INPUT);
-    pinMode(control_pin, OUTPUT);
-    pinMode(dir_pin, OUTPUT);
-    pinMode(enable_pin, OUTPUT);
 }
 
 void Motor::set(double value){
@@ -57,6 +52,8 @@ void Motor::change_direction(){
 void Motor::enable(){
     digitalWrite(enable_pin, LOW);
 }
+
+
 
 void Motor::measure_feedback(){
     int current_time = millis();

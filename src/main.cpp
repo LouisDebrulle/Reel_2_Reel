@@ -16,7 +16,7 @@ const int filter_size = 30;
 
 const int MAX_SPEED = 5;
 const int gear_ratio = 100;
-const int MAX_TORQUE = 10;
+const int MAX_TORQUE = 500;
 
 Board _board;
 Speed_motor speed_motor(_board, MAX_SPEED*gear_ratio);
@@ -84,6 +84,7 @@ void change_direction(){
     //float dc = _pid.output(speed_des, speed_smooth);
     int dc = speed_motor.get_dc(speed_des);
     speed_motor.set(int(dc));
+    breake_motor.set(int(dc));
 
     double pos = _board._pos_sensor.get_pos();
 

@@ -30,12 +30,23 @@ public:
                 .feedback_pin = motor1_out_pin,
                 .dir_pin = motor1_dir_pin,
                 .energize_pin = motor1_energize_pin},
-    motor2 = {.control_pin = motor1_control_pin, 
+    motor2 = {.control_pin = motor2_control_pin, 
                 .feedback_pin = motor2_out_pin,
                 .dir_pin = motor2_dir_pin,
                 .energize_pin = motor2_energize_pin};
     
     void init() {
+
+        pinMode(motor1.control_pin, OUTPUT);
+        pinMode(motor1.feedback_pin, INPUT);
+        pinMode(motor1.dir_pin, OUTPUT);
+        pinMode(motor1.energize_pin, OUTPUT);
+
+        pinMode(motor2.control_pin, OUTPUT);
+        pinMode(motor2.feedback_pin, INPUT);
+        pinMode(motor2.dir_pin, OUTPUT);
+        pinMode(motor2.energize_pin, OUTPUT);
+
         _pwm.innit();
         _encoder.innit();
         _pos_sensor.innit();

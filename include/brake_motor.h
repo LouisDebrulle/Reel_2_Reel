@@ -7,7 +7,6 @@
 class Breake_motor : public Motor
 {
     public:
-
     Breake_motor(Board& board, int max_value);
 };
 
