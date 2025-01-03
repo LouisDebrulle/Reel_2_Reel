@@ -37,16 +37,6 @@ public:
     
     void init() {
 
-        pinMode(motor1.control_pin, OUTPUT);
-        pinMode(motor1.feedback_pin, INPUT);
-        pinMode(motor1.dir_pin, OUTPUT);
-        pinMode(motor1.energize_pin, OUTPUT);
-
-        pinMode(motor2.control_pin, OUTPUT);
-        pinMode(motor2.feedback_pin, INPUT);
-        pinMode(motor2.dir_pin, OUTPUT);
-        pinMode(motor2.energize_pin, OUTPUT);
-
         _pwm.innit();
         _encoder.innit();
         _pos_sensor.innit();

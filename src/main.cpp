@@ -16,7 +16,7 @@ const int filter_size = 30;
 
 const int MAX_SPEED = 5;
 const int gear_ratio = 100;
-const int MAX_TORQUE = 500;
+const int MAX_TORQUE = 10;
 
 Board _board;
 Speed_motor speed_motor(_board, MAX_SPEED*gear_ratio);
@@ -45,8 +45,13 @@ void motor_feedback(){
 }
 
 void change_direction(){
+  if (kernel.state != off)
+  {
   speed_motor.change_direction();
   breake_motor.change_direction();
+  }
+  
+  
 }
 
 
@@ -66,8 +71,10 @@ void change_direction(){
 
   case on:
     digitalWrite(led_pin, HIGH);
-    digitalWrite(_board.motor1.energize_pin, HIGH);
-    digitalWrite(_board.motor2.energize_pin, HIGH);
+    
+
+    speed_motor.init();
+    breake_motor.init();
     _board.init();
     speed_filter.init();
 
@@ -114,7 +121,6 @@ Serial.begin(9600);
 Timer1.initialize(lDt); 
 Timer1.attachInterrupt(main_loop);
 
-speed_motor.init();
 _board.init();
 kernel.change_state();
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);

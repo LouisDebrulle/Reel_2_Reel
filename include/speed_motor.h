@@ -7,6 +7,7 @@
 class Speed_motor : public Motor
 {
 public:
+void init();
     Speed_motor(Board& board, int max_value);
 };
 
@@ -21,6 +22,11 @@ Speed_motor::Speed_motor(Board& board, int max_value) : Motor(board, max_value)
     dir_pin = _board.motor1.dir_pin;
     enable_pin = _board.motor1.energize_pin;
 
+}
+
+void Speed_motor:: init(){
+    digitalWrite(enable_pin, HIGH);
+    digitalWrite(dir_pin, HIGH);
 }
 
 

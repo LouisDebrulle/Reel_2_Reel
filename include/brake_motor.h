@@ -8,9 +8,14 @@ class Breake_motor : public Motor
 {
     public:
     Breake_motor(Board& board, int max_value);
+    void init();
 };
 
 
+void Breake_motor:: init(){
+    digitalWrite(enable_pin, HIGH);
+    digitalWrite(dir_pin, LOW);
+}
 
 Breake_motor::Breake_motor(Board& board, int max_value) : Motor(board, max_value)
 {
