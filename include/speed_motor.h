@@ -22,11 +22,17 @@ Speed_motor::Speed_motor(Board& board, int max_value) : Motor(board, max_value)
     dir_pin = _board.motor1.dir_pin;
     enable_pin = _board.motor1.energize_pin;
 
+    pinMode(control_pin, OUTPUT);
+    pinMode(feedback_pin, INPUT);
+    pinMode(dir_pin, OUTPUT);
+    pinMode(enable_pin, OUTPUT);
+
 }
 
 void Speed_motor:: init(){
     digitalWrite(enable_pin, HIGH);
-    digitalWrite(dir_pin, HIGH);
+    direction = false;
+    digitalWrite(dir_pin, direction);
 }
 
 

@@ -128,11 +128,14 @@ attachInterrupt(digitalPinToInterrupt(on_off_pin), check_status, CHANGE);
 attachInterrupt(digitalPinToInterrupt(start_motor_pin), check_status, CHANGE);
 attachInterrupt(digitalPinToInterrupt(dir_pin), change_direction, CHANGE);
 
+/*
 while (digitalRead(on_off_pin) || digitalRead(start_motor_pin) )
 {
   Serial.println("power off");
   delay(1000);
 }
+*/
+
 
 }
  
