@@ -31,8 +31,6 @@ Motor::Motor(Board& board, int _max_value) :_board(board), MAX_VALUE(_max_value)
 {
     last_time = 0;
     pulse_intervall = 0;
-    
-
 }
 
 void Motor::set(double value){

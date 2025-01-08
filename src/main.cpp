@@ -87,11 +87,11 @@ void change_direction(){
     double speed_smooth = speed_filter.get_average();
     
     double speed_des = _speed_curve.getSpeedAtTime(time);
-    double motor_fb_speed = speed_motor.get_feedback();
-    //float dc = _pid.output(speed_des, speed_smooth);
-    int dc = speed_motor.get_dc(speed_des);
-    speed_motor.set(int(dc));
-    breake_motor.set(int(dc));
+    //double motor_fb_speed = speed_motor.get_feedback();
+    int input_speed = speed_motor.get_dc(speed_des);
+    int input_breake = breake_motor.get_dc(speed_des);
+    speed_motor.set(int(input_speed));
+    breake_motor.set(int(input_breake));
 
     double pos = _board._pos_sensor.get_pos();
 
@@ -102,7 +102,11 @@ void change_direction(){
     Serial.print(" ,");
     Serial.print(speed, 4);
     Serial.print(" ,");
-    Serial.println(speed_smooth);
+    Serial.print(input_speed);
+    Serial.print(" ,");
+    Serial.print(input_breake);
+    Serial.print(" ,");
+    Serial.println(pos);
     
     
     //Serial.print(double(dc)/ICR4 *100); // 
