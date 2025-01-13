@@ -24,7 +24,7 @@ pos_sensor::pos_sensor(int _pin1, int _pin2)
 }
 
 double pos_sensor::get_pos(){
-    double analog_sense = analogRead(pin1);
+    double analog_sense = analogRead(pin2);
     double voltage = analog_sense * 5.0 / 1023.0;
     if (voltage < 0.5){pos = 0;}
     else if (voltage >4.5){pos = 25;}

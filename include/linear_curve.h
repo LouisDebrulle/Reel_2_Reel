@@ -1,19 +1,19 @@
-#ifndef LIN_SPEED_CURVE
-#define LIN_SPEED_CURVE
+#ifndef LIN_CURVE
+#define LIN_CURVE
 
-class lin_speed_curve {
+class lin_curve {
   public:
     double* times;
     double* speeds;
     int numPoints;
 
-    lin_speed_curve(double* timeArray, double* speedArray, int size) {
+    lin_curve(double* timeArray, double* speedArray, int size) {
       times = timeArray;
       speeds = speedArray;
       numPoints = size;
     }
 
-    double getSpeedAtTime(double time) {
+    double get(double time) {
       if (time <= times[0]) {
         return 0; 
       }

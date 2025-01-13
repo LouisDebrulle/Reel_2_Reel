@@ -7,71 +7,68 @@
 
 class PID {
 public:
-    PID(float kp, float ki, float kd, float outMin, float outMax) {
-      kp_ = kp;
-      ki_ = ki;
-      kd_ = kd;
-      outMax_=outMax;
-      outMin_=outMin;
-    }
+float kp=0;
+    float ki=0;
+    float kd=0;
+    float outMax=0;
+    float outMin=0;
 
-    void resetParam(float kp, float ki, float kd);
-    float output(float w, float y);
-    void wirtData(float OutVal, float w, bool ControlEN);
-    static float setpointZelle(float w);
-    static float setpointKuelbox(float w);
-
-    float kp_=0;
-    float ki_=0;
-    float kd_=0;
-    float outMax_=0;
-    float outMin_=0;
+    double pos_des = 0;
+    double u_des = 0;
 
     float cumError=0;
     float lastError=0;
     long previousTime=0;
 
+    PID(float kp_, float ki_, float kd_, float outMin_, float outMax_) {
+      kp = kp_;
+      ki = ki_;
+      kd_= kd_;
+      outMax=outMax_;
+      outMin=outMin_;
+    }
+
+    float output(float setpoint, float mes, long time);
+    double spring_curve(double pos);
+    void innit();
+    
+
 };
 
 
-
-void PID::resetParam(float kp, float ki, float kd)
-{
-  kp_ = kp;
-  ki_ = ki;
-  kd_ = kd;
-}
-
-float PID::output(float w, float y)
+float PID::output(float setpoint, float mes, long time)
 {
 
-  long currentTime = millis();
+  long currentTime = time;
   float elapsedTime = (currentTime - previousTime);
-  float error = (w - y);
-  float dIntegralStep = error * elapsedTime;
+  float error = (setpoint - mes);
+  cumError = cumError + error * elapsedTime;
   float dDifferentialStep = (error - lastError) / elapsedTime;
 
-  float out = kp_ * error + ki_ * (dIntegralStep + cumError) + kd_ * dDifferentialStep;
+  float e = kp * error + ki * cumError  + kd * dDifferentialStep;
+  float u_des = spring_curve(setpoint);
+  float out = e + u_des;
   
-
+   if (out > outMax) {out = outMax;}
+  else if (out < outMin) {out = outMin;}
   
-   if (out > outMax_)
-  {
-    Serial.print("max : ");
-    out = outMax_;
-  }
-  else if (out < outMin_)
-  {
-    Serial.println("min");
-    out = outMin_;
-  }
-  
- 
- 
   lastError = error;
   previousTime = currentTime;
   return out;
 }
 
 
-#endif // PID_CPP
+double PID::spring_curve(double pos){
+  double m = 5;
+  double c = -14.05;
+  return m*pos +c;
+}
+
+void PID::innit(){
+  cumError=0;
+  lastError=0;
+  previousTime=0;
+}
+
+
+#endif 
