@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "motor.h"
+#include "linear_curve.h"
 
 class Breake_motor : public Motor
 {
@@ -32,7 +33,6 @@ void Breake_motor:: init(){
     direction = true;
     digitalWrite(dir_pin, direction);
 }
-
 
 
 #endif

@@ -7,7 +7,7 @@
 
 class PID {
 public:
-float kp=0;
+    float kp=0;
     float ki=0;
     float kd=0;
     float outMax=0;
@@ -20,12 +20,18 @@ float kp=0;
     float lastError=0;
     long previousTime=0;
 
+    double out;
+    double offset;
+
     PID(float kp_, float ki_, float kd_, float outMin_, float outMax_) {
       kp = kp_;
       ki = ki_;
       kd_= kd_;
       outMax=outMax_;
       outMin=outMin_;
+
+      out = 0,
+      offset = 0;
     }
 
     float output(float setpoint, float mes, long time);
@@ -46,8 +52,8 @@ float PID::output(float setpoint, float mes, long time)
   float dDifferentialStep = (error - lastError) / elapsedTime;
 
   float e = kp * error + ki * cumError  + kd * dDifferentialStep;
-  float u_des = spring_curve(setpoint);
-  float out = e + u_des;
+
+  out = e+offset;
   
    if (out > outMax) {out = outMax;}
   else if (out < outMin) {out = outMin;}
@@ -68,6 +74,9 @@ void PID::innit(){
   cumError=0;
   lastError=0;
   previousTime=0;
+
+  offset = out;
+  out = 0;
 }
 
 

@@ -1,0 +1,26 @@
+#ifndef PARAMS_H
+#define PARAMS_H
+
+#include "linear_curve.h"
+
+unsigned long lDt = 100*1e3;
+const int filter_size = 30;
+
+const int MAX_SPEED = 5;
+const int gear_ratio = 100;
+const int MAX_TORQUE = 100;
+double des_pos = 15;
+double start_pos = 10;
+
+double speed_des = 200;
+double radius_ratio = 30.0/57.0;
+double motor_speed = speed_des*radius_ratio;
+
+double times[] = {0, 10};
+double speed_points[] = {0, 100};
+double break_points[] = {100, start_pos};
+
+lin_curve _speed_curve(times, speed_points, sizeof(times)/sizeof(times[0])); 
+lin_curve _breake_curve(times, break_points, sizeof(times)/sizeof(times[0]));
+
+#endif 

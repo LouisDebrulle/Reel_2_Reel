@@ -40,14 +40,16 @@ void state_machine::change_state() {
     case off:
         if (digitalRead(on_off_pin)) {
             state = on; 
-            Serial.println("on"); 
+            Serial.println("on");
+            last_time = millis(); 
             return;}
         break;
 
     case on:
         if(!digitalRead(on_off_pin)){
             state = off; 
-            Serial.println("off"); 
+            Serial.println("off");
+            last_time = millis();  
             return;}
         if (digitalRead(start_motor_pin)) {
             state = running; 
@@ -58,9 +60,11 @@ void state_machine::change_state() {
     case running:
         if (!digitalRead(on_off_pin)) {state = off;
             Serial.println("off"); 
+            last_time = millis(); 
             return;}
         if (!digitalRead(start_motor_pin)) {state = on;
-            Serial.println("on"); 
+            Serial.println("on");
+            last_time = millis(); 
             return;}
         break;
         
