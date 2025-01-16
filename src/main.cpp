@@ -10,6 +10,7 @@
 #include "speed_motor.h"
 #include "brake_motor.h"
 #include "params.h"
+#include "reel_2_reel_sys.h"
 
 
 Board _board;
@@ -17,7 +18,8 @@ Speed_motor speed_motor(_board, MAX_SPEED*gear_ratio);
 Breake_motor breake_motor(_board, MAX_TORQUE);
 
 state_machine kernel(_board);
-PID _pid(0.05,0.001,0,0, 90);
+reel_2_reel_sys reel_2_reel;
+PID _pid(0,0.005,0,0, 90); //0.05,0.001,0,0, 90
 
 mv_average_filter speed_filter(filter_size);
 
@@ -74,7 +76,8 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     digitalWrite(led_pin, LOW);
     speed_motor.enable();
     breake_motor.enable();
-    _pid.offset = 0;
+    // _pid.offset = 0;
+
     break;
 
   }
@@ -89,7 +92,7 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     int input_breake_start_pos = breake_motor.get_dc(breake_des_start_pos);
     breake_motor.set(int(input_breake_start_pos));
     
-    print_results(time, 0, 0, 0, input_breake_start_pos, start_pos, _board._pos_sensor.get_pos());
+    print_results(millis()-kernel.start_time, 0, 0, 0, input_breake_start_pos, start_pos, _board._pos_sensor.get_pos());
     
 
     break;
@@ -112,7 +115,7 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     breake_motor.set(int(input_breake));
 
 
-    print_results(time, speed_des, speed_smooth, input_speed, input_breake, des_pos, pos);
+    print_results(millis()-kernel.start_time, speed_des, speed_smooth, input_speed, input_breake, des_pos, pos);
     break;
     }
   }
@@ -128,6 +131,8 @@ Timer1.attachInterrupt(main_loop);
 
 _board.init();
 kernel.change_state();
+reel_2_reel.rest_pos = _board._pos_sensor.get_pos();
+
 attachInterrupt(digitalPinToInterrupt(encoderPinA), encoder_step, RISING);
 attachInterrupt(digitalPinToInterrupt(on_off_pin), change_state, CHANGE);
 attachInterrupt(digitalPinToInterrupt(start_motor_pin), change_state, CHANGE);

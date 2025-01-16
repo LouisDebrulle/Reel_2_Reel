@@ -64,11 +64,7 @@ float PID::output(float setpoint, float mes, long time)
 }
 
 
-double PID::spring_curve(double pos){
-  double m = 5;
-  double c = -14.05;
-  return m*pos +c;
-}
+
 
 void PID::innit(){
   cumError=0;

@@ -21,6 +21,7 @@ public:
     Board& _board;
 
     unsigned long last_time;
+    unsigned long start_time;
     state_machine(Board& board);
     void change_state();
     double get_time();
@@ -42,6 +43,7 @@ void state_machine::change_state() {
             state = on; 
             Serial.println("on");
             last_time = millis(); 
+            start_time = millis();
             return;}
         break;
 
