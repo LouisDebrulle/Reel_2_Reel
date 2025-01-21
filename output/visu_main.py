@@ -54,7 +54,6 @@ pos = []
 
 def update():
     global time, speed_des, speed_mes, motor1_input, motor2_input, pos_des, pos
-    global time_on, speed_des_on, speed_mes_on, motor1_input_on, motor2_input_on, pos_des_on, pos_on
     if ser.in_waiting > 0:  
         line = ser.readline().decode('utf-8').strip()
         values = line.split(',')  
@@ -97,7 +96,8 @@ def update():
 
         elif line == "running" or line == "on":
             
-            print("on")
+            print(" ")
+            csv_writer.writerow([])
             time.clear()
             speed_des.clear()
             speed_mes.clear()
@@ -106,12 +106,10 @@ def update():
             pos_des.clear()
             pos.clear()
             
-            csv_file.truncate()
             
         elif line == "off":
             print("off")
-            #csv_file.close()
-            #print("Serial connection and CSV file closed.")
+            
                
 
 timer = QtCore.QTimer()
@@ -120,3 +118,5 @@ timer.start(50)
 
 if __name__ == '__main__':
     pg.exec()
+    csv_file.close()
+    print("Serial connection and CSV file closed.")
