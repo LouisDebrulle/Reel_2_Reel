@@ -19,7 +19,8 @@ Breake_motor breake_motor(_board, MAX_TORQUE);
 
 state_machine kernel(_board);
 reel_2_reel_sys reel_2_reel;
-PID _pid(0,0.005,0,0, 90); //0.05,0.001,0,0, 90
+PID pos_controller(0,0.005,0,0, 90); //0.05,0.001,0,0, 90
+PID speed_controller(0,0.005,0,0, 90);
 
 mv_average_filter speed_filter(filter_size);
 
@@ -32,7 +33,7 @@ void change_state(){
   kernel.change_state(); 
   speed_motor.init();
     breake_motor.init();
-    _pid.innit();
+    pos_controller.innit();
     _board.init();
     speed_filter.init();
 }
@@ -76,7 +77,7 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     digitalWrite(led_pin, LOW);
     speed_motor.enable();
     breake_motor.enable();
-    // _pid.offset = 0;
+    // pos_controller.offset = 0;
 
     break;
 
@@ -88,7 +89,7 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     digitalWrite(led_pin, HIGH);
     double time = kernel.get_time();
 
-    double breake_des_start_pos = _pid.output(start_pos, _board._pos_sensor.get_pos(), time);
+    double breake_des_start_pos = pos_controller.output(start_pos, _board._pos_sensor.get_pos(), time);
     int input_breake_start_pos = breake_motor.get_dc(breake_des_start_pos);
     breake_motor.set(int(input_breake_start_pos));
     
@@ -107,7 +108,7 @@ void print_results(double time, double speed_des, double speed_smooth, double in
     
     double pos = _board._pos_sensor.get_pos();
 
-    double breake_des = _pid.output(des_pos, pos, time);    
+    double breake_des = pos_controller.output(des_pos, pos, time);    
 
     int input_speed = speed_motor.get_dc(motor_speed);
     int input_breake = breake_motor.get_dc(breake_des);
