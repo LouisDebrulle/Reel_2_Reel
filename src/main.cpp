@@ -38,7 +38,7 @@ void change_state(){
 }
 
 void motor_feedback(){
-  speed_motor.measure_feedback();
+  // speed_motor.measure_feedback();
 }
 
 void change_direction(){

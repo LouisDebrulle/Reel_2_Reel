@@ -20,8 +20,7 @@ public:
     void change_direction();
 
     int get_dc(double value);
-    void measure_feedback();
-    double get_feedback();
+   
     Motor(Board& board, int _max_value);
     
 };
@@ -46,18 +45,6 @@ void Motor::change_direction(){
 
 void Motor::enable(){
     digitalWrite(enable_pin, LOW);
-}
-
-
-
-void Motor::measure_feedback(){
-    int current_time = millis();
-    pulse_intervall = current_time - last_time;
-    last_time = current_time;
-}
-
-double Motor::get_feedback(){
-    return double(pulse_intervall)/2.083 *MAX_VALUE;
 }
 
 

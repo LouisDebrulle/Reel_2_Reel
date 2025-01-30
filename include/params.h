@@ -12,12 +12,12 @@ const int filter_size = 30;
 //Speed- and Torque Motor params
 const int MAX_SPEED = 5;
 const int gear_ratio = 100;
-const int MAX_TORQUE = 100;
-double des_pos = 15;
-double start_pos = 10;
-double speed_des = 200;
+const int MAX_TORQUE = 100; 
+double des_pos = 15; // max25
+double start_pos = 10; // max 25
+double speed_des = 2;
 double radius_ratio = 30.0/57.0;
-double motor_speed = speed_des*radius_ratio;
+double motor_speed = speed_des*radius_ratio*gear_ratio;
 
 //Speed and Break curves
 double times[] = {0, 10};

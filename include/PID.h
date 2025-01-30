@@ -65,7 +65,6 @@ float PID::output(float setpoint, float mes, long time)
 
 
 
-
 void PID::innit(){
   cumError=0;
   lastError=0;
