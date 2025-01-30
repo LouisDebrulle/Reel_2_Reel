@@ -15,9 +15,9 @@ const int gear_ratio = 100;
 const int MAX_TORQUE = 100; 
 double des_pos = 15; // max25
 double start_pos = 10; // max 25
-double speed_des = 2;
+double moving_speed = 2;
 double radius_ratio = 30.0/57.0;
-double motor_speed = speed_des*radius_ratio*gear_ratio;
+double motor_speed = moving_speed*radius_ratio*gear_ratio;
 
 //Speed and Break curves
 double times[] = {0, 10};
