@@ -12,6 +12,7 @@
 #include "params.h"
 #include "reel_2_reel_sys.h"
 
+// branch "speed control" inclut un régulateur de vitesse et une stabilisation de la position de départ pour l'état on
 
 Board _board;
 Speed_motor speed_motor(_board, MAX_SPEED*gear_ratio);

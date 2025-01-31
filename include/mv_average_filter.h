@@ -3,7 +3,7 @@
 
 class mv_average_filter {
 private:
-    int MAX_SIZE; // Define a fixed size
+    int MAX_SIZE; 
     double* data;
     int count;
 
@@ -14,11 +14,10 @@ public:
 
     void push(double value) {
         if (count == MAX_SIZE) {
-            // Shift the elements to make space for the new value
             for (int i = MAX_SIZE - 1; i > 0; --i) {
                 data[i] = data[i - 1];
             }
-            data[0] = value; // Add the new value at the start
+            data[0] = value; 
         } else {
             for (int i = count; i > 0; --i) {
                 data[i] = data[i - 1];
@@ -33,7 +32,7 @@ public:
     }
 
     double get_average() const {
-        if (count == 0) return 0.0; // Return 0.0 if the filter is empty
+        if (count == 0) return 0.0; 
         double sum = 0.0;
         for (int i = 0; i < count; ++i) {
             sum += data[i];
@@ -42,9 +41,9 @@ public:
     }
 
     void init() {
-        count = 0; // Reset count to zero
+        count = 0; 
         for (int i = 0; i < MAX_SIZE; ++i) {
-            data[i] = 0.0; // Clear the buffer
+            data[i] = 0.0;
         }
     }
 };

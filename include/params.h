@@ -12,7 +12,7 @@ const int filter_size = 30;
 //Speed- and Torque Motor params
 const int MAX_SPEED = 5;
 const int gear_ratio = 100;
-const int MAX_TORQUE = 100; 
+const int MAX_TORQUE = 100; // dont change to 20
 double des_pos = 15; // max25
 double start_pos = 10; // max 25
 double speed_des = 2;
